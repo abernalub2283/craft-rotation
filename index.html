@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Craft Rotation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Craft Rotation</h1>
+    <div id="lanes"></div>
+    <div id="add-project">
+        <input type="text" id="new-proj-name" placeholder="Project name">
+        <select id="new-proj-lane"></select>
+        <input type="text" id="new-proj-note" placeholder="Note (optional)">
+        <button id="add-proj-btn">Add Project</button>
+    </div>
+
+    <script>
+        const seedLanes = [
+            { name: 'Main Lane', projects: [
+                { name: 'Will-O-The-Wisp', pct: 50, note: 'Sock #2 in progress' },
+                { name: 'Sweet Blossom', pct: 40, note: '' },
+                { name: 'Framed Stitches', pct: 7, note: 'Christmas deadline — 3/42 squares' },
+                { name: 'Dragon Scales', pct: 35, note: '' },
+                { name: 'Lace into Spring', pct: 26, note: '' }
+            ]},
+            { name: 'Side Lane', projects: [
+                { name: 'Bunny cross-stitch', pct: 32, note: 'A couple of relaxed sessions a week' }
+            ]},
+            { name: 'Queued', projects: [
+                { name: 'September Socks', pct: 0, note: 'Cast on after Wisp' },
+                { name: 'Green sweater kit', pct: 0, note: 'When a lane opens' }
+            ]}
+        ];
+
+        let lanes;
+        const saved = localStorage.getItem('craftRotation');
+        if (saved) {
+            lanes = JSON.parse(saved);
+        } else {
+            lanes = seedLanes;
+            saveLanes();
+        }
+
+        function saveLanes() {
+            localStorage.setItem('craftRotation', JSON.stringify(lanes));
+        }
+
+        function renderAll() {
+            renderLanes();
+            const select = document.getElementById('new-proj-lane');
+            select.innerHTML = '';
+            lanes.forEach(function(lane, index) {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = lane.name;
+                select.appendChild(opt);
+            });
+        }
+
+        function renderLanes() {
+            const wrap = document.getElementById('lanes');
+            wrap.innerHTML = '';
+            lanes.forEach(function(lane, laneIndex) {
+                const col = document.createElement('div');
+                col.className = 'lane';
+
+                const head = document.createElement('div');
+                head.className = 'lane-head';
+                const h2 = document.createElement('h2');
+                h2.textContent = lane.name;
+                head.appendChild(h2);
+                if (lane.projects.length > 1) {
+                    const rot = document.createElement('button');
+                    rot.textContent = 'Rotate ⟳';
+                    rot.className = 'rotate-btn';
+                    rot.addEventListener('click', function() {
+                        lane.projects.push(lane.projects.shift());
+                        saveLanes();
+                        renderAll();
+                    });
+                    head.appendChild(rot);
+                }
+                col.appendChild(head);
+
+                lane.projects.forEach(function(project) {
+                    const card = document.createElement('div');
+                    card.className = 'project';
+
+                    const top = document.createElement('div');
+                    top.className = 'project-top';
+                    const name = document.createElement('strong');
+                    name.textContent = project.name;
+                    top.appendChild(name);
+                    const del = document.createElement('button');
+                    del.textContent = '✕';
+                    del.className = 'remove-btn';
+                    del.addEventListener('click', function() {
+                        const i = lane.projects.indexOf(project);
+                        lane.projects.splice(i, 1);
+                        saveLanes();
+                        renderAll();
+                    });
+                    top.appendChild(del);
+                    card.appendChild(top);
+
+                    const bar = document.createElement('div');
+                    bar.className = 'progress-bar';
+                    const fill = document.createElement('div');
+                    fill.className = 'progress-fill';
+                    fill.style.width = project.pct + '%';
+                    bar.appendChild(fill);
+                    card.appendChild(bar);
+
+                    const row = document.createElement('div');
+                    row.className = 'slider-row';
+                    const slider = document.createElement('input');
+                    slider.type = 'range';
+                    slider.min = '0';
+                    slider.max = '100';
+                    slider.value = project.pct;
+                    const label = document.createElement('span');
+                    label.className = 'pct-label';
+                    label.textContent = project.pct + '%';
+                    slider.addEventListener('input', function(event) {
+                        project.pct = parseInt(event.target.value, 10);
+                        fill.style.width = project.pct + '%';
+                        label.textContent = project.pct + '%';
+                        saveLanes();
+                    });
+                    row.appendChild(slider);
+                    row.appendChild(label);
+                    card.appendChild(row);
+
+                    if (project.note) {
+                        const note = document.createElement('div');
+                        note.className = 'note';
+                        note.textContent = project.note;
+                        card.appendChild(note);
+                    }
+
+                    col.appendChild(card);
+                });
+
+                wrap.appendChild(col);
+            });
+        }
+
+        document.getElementById('add-proj-btn').addEventListener('click', function() {
+            const nameInput = document.getElementById('new-proj-name');
+            const name = nameInput.value.trim();
+            if (!name) return;
+            const laneIndex = parseInt(document.getElementById('new-proj-lane').value, 10);
+            const note = document.getElementById('new-proj-note').value.trim();
+            lanes[laneIndex].projects.push({ name: name, pct: 0, note: note });
+            nameInput.value = '';
+            document.getElementById('new-proj-note').value = '';
+            saveLanes();
+            renderAll();
+        });
+
+        renderAll();
+    </script>
+</body>
+</html>

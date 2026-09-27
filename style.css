@@ -1,0 +1,145 @@
+body {
+    background-color: #1a1a2e;
+    color: #e8e0d0;
+    font-family: Georgia, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    margin: 0;
+}
+
+h1 {
+    color: #c9a227;
+    text-align: center;
+}
+
+#lanes {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.lane {
+    background-color: #2d1b2e;
+    border: 2px solid #c9a227;
+    border-radius: 12px;
+    padding: 16px;
+    width: 300px;
+}
+
+.lane-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.lane-head h2 {
+    color: #c9a227;
+    margin: 0;
+    font-size: 20px;
+}
+
+.rotate-btn {
+    background: none;
+    border: 2px solid #c9a227;
+    color: #c9a227;
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-family: Georgia, serif;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.project {
+    background-color: #1a1a2e;
+    border: 1px solid #c9a227;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+.project-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: #b76e79;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.progress-bar {
+    background-color: #2d1b2e;
+    border-radius: 6px;
+    height: 12px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-fill {
+    background-color: #c9a227;
+    height: 100%;
+}
+
+.slider-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.slider-row input[type="range"] {
+    flex-grow: 1;
+    accent-color: #c9a227;
+}
+
+.pct-label {
+    color: #c9a227;
+    min-width: 44px;
+    text-align: right;
+}
+
+.note {
+    color: #a89a7a;
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 6px;
+}
+
+#add-project {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#add-project input,
+#add-project select {
+    background-color: #2d1b2e;
+    color: #e8e0d0;
+    border: 2px solid #c9a227;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: Georgia, serif;
+    font-size: 15px;
+}
+
+#add-proj-btn {
+    background-color: #c9a227;
+    color: #1a1a2e;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    cursor: pointer;
+}
